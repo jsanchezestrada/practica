@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, TextInput } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Index() {
 
@@ -14,6 +14,19 @@ export default function Index() {
   setTareas([...tareas, tarea]);
   setTarea("");
   setMostrarInput(false);
+};
+const eliminarTarea = (index: number) => {
+  const confirmar = window.confirm(
+    "¿Está seguro que desea eliminar la tarea?"
+  );
+
+  if (confirmar) {
+    const nuevasTareas = tareas.filter(
+      (_, i) => i !== index
+    );
+
+    setTareas(nuevasTareas);
+  }
 };
 
   return (
@@ -46,9 +59,23 @@ export default function Index() {
 <Text style={styles.subtitulo}>Mis tareas</Text>
 
 {tareas.map((tarea, index) => (
-  <Text style={styles.tarea} key={index}>
-    {index + 1}. {tarea}
-  </Text>
+  <View style={styles.tarea} key={index}>
+    <Text style={styles.textoTarea}>
+      {index + 1}. {tarea}
+    </Text>
+
+    <Pressable
+      style={styles.botonEliminar}
+      onPress={() => {
+  console.log("Botón presionado", index);
+  eliminarTarea(index);
+}}
+    >
+      <Text style={styles.textoEliminar}>
+        Eliminar
+      </Text>
+    </Pressable>
+  </View>
 ))}
      
     </ScrollView>
@@ -74,7 +101,7 @@ const styles = StyleSheet.create({
 },
 
    boton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#f8b5e7",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
@@ -94,7 +121,7 @@ const styles = StyleSheet.create({
   marginTop: 15,
 },
   botonGuardar: {
-  backgroundColor: "green",
+  backgroundColor: "pink",
   padding: 15,
   borderRadius: 10,
   alignItems: "center",
@@ -102,11 +129,29 @@ const styles = StyleSheet.create({
 },
 
 tarea: {
-  fontSize: 18,
   padding: 12,
   marginBottom: 8,
   borderWidth: 1,
   borderRadius: 8,
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+},
+
+textoTarea: {
+  fontSize: 18,
+},
+
+botonEliminar: {
+  backgroundColor: "red",
+  paddingVertical: 8,
+  paddingHorizontal: 12,
+  borderRadius: 8,
+},
+
+textoEliminar: {
+  color: "white",
+  fontWeight: "bold",
 },
 
 });
